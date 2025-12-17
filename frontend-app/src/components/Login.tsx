@@ -1,4 +1,4 @@
-import { useNavigate } from '@tanstack/react-router'
+import { Link, useNavigate } from '@tanstack/react-router'
 import { usePocketBase } from '../context/PocketBaseContext'
 import { useState } from 'react'
 import { Button, Input } from '@headlessui/react'
@@ -97,7 +97,7 @@ export const Login = () => {
             Log ind
           </Button>
           <div className="hover:text-gray-1000 mt-4 text-center text-sm text-gray-600 underline">
-            <a href="/register">Ny bruger?</a>
+            <Link to="/register">Ny bruger?</Link>
           </div>
           {errorText !== undefined && (
             <div className="mt-2 rounded p-2 text-sm text-sadred">
