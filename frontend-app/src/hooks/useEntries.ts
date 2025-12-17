@@ -1,10 +1,10 @@
 import { usePocketBase } from '../context/PocketBaseContext'
 import type { BatchService, RecordListOptions } from 'pocketbase'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { chain } from "lodash"
+import { chain } from 'lodash'
 
 export type EntriesByYear = {
-  year: string,
+  year: string
   entries: ViewEntry[]
 }
 
@@ -30,12 +30,16 @@ export type Entry = {
   type?: string
 }
 
-export type EntryType = 'Energy Consumption Non-renewable' | 'Energy Consumption Renewable' | 'CO2 Emission'
+export type EntryType =
+  | 'Energy Consumption Non-renewable'
+  | 'Energy Consumption Renewable'
+  | 'CO2 Emission'
 
 export type Domain = 'El' | 'Varme' | 'Gas'
 
-export type EntriesDistribution =
-  { [key in number]: { [key in EntryType]?: { [key in Domain]?: number } } }
+export type EntriesDistribution = {
+  [key in number]: { [key in EntryType]?: { [key in Domain]?: number } }
+}
 
 const createOrUpdateEntry = async (batch: BatchService, entry: Entry) => {
   if (entry.id !== undefined) {
@@ -91,15 +95,12 @@ export const useEntries = (
     isError: isErrorDelete,
   } = useMutation<void, Error, { year: string }>({
     mutationFn: async ({ year }) => {
-      const response = await fetch(
-        `http://localhost:8080/api/dataentries/${year}`,
-        {
-          method: 'DELETE',
-          headers: {
-            Authorization: `Bearer ${pb.authStore.token}`,
-          },
-        }
-      )
+      const response = await fetch(`/api/dataentries/${year}`, {
+        method: 'DELETE',
+        headers: {
+          Authorization: `Bearer ${pb.authStore.token}`,
+        },
+      })
 
       if (!response.ok) {
         const errorData = await response.json()
@@ -126,21 +127,28 @@ export const useEntries = (
 export const useEntriesByYear = () => {
   const { pb } = usePocketBase()
   return useQuery<EntriesByYear[], Error>({
-    queryKey: ["entriesByYear"],
+    queryKey: ['entriesByYear'],
     queryFn: async () => {
-      const entries = await pb.collection<ViewEntry>('view_entries').getFullList()
-      const entriesByYear = chain(entries).groupBy("year").map((value, key) => ({ year: key, entries: value })).value()
+      const entries = await pb
+        .collection<ViewEntry>('view_entries')
+        .getFullList()
+      const entriesByYear = chain(entries)
+        .groupBy('year')
+        .map((value, key) => ({ year: key, entries: value }))
+        .value()
       return entriesByYear
-    }
+    },
   })
 }
 
 export const useEntriesDistribution = () => {
   const { pb } = usePocketBase()
   return useQuery<EntriesDistribution, Error>({
-    queryKey: ["entriesByYear"],
+    queryKey: ['entriesByYear'],
     queryFn: async () => {
-      const entries = await pb.collection<ViewEntry>('view_entries').getFullList()
+      const entries = await pb
+        .collection<ViewEntry>('view_entries')
+        .getFullList()
       const entriesDistribution: EntriesDistribution = {}
       entries.forEach(entry => {
         const year = entry.year
@@ -153,9 +161,11 @@ export const useEntriesDistribution = () => {
           entriesDistribution[year][entry.typeName as EntryType] = {}
         }
         // Initialize domain if it does not exists in type
-        entriesDistribution[year][entry.typeName as EntryType]![entry.domainName as Domain] = entry.value
+        entriesDistribution[year][entry.typeName as EntryType]![
+          entry.domainName as Domain
+        ] = entry.value
       })
       return entriesDistribution
-    }
+    },
   })
 }
