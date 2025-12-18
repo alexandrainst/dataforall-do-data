@@ -351,78 +351,81 @@ export const Dashboard = () => {
 
   return (
     <PageTemplate title="Dashboard">
-      {entryGroups !== undefined && entryGroups.length > 0 ?
-      <div className="flex flex-wrap gap-4">
-        {myInsights.length > 0 && <Insights insights={myInsights} />}
-        <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <BarChart
-            name="myDistribution"
-            title="Min fordeling af elektricitet, fjernvarme og brændsler"
-            data={myConsumptionDistribution ?? []}
-            control={control}
-            dataOptions={myDistributionDataOptions}
-          />
-        </div>
-        <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <BarChart
-            name="distributionComparison"
-            title="Fordeling af elektricitet, fjernvarme og brændsler"
-            data={distributionComparison}
-            control={control}
-            dataOptions={distributionComparisonDataOptions}
-            comparisonOptions={distributionComparisonOptions}
-          />
-        </div>
-        <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <BarChart
-            name="myDistributionComparison"
-            title="Mit forbrug sammenlignet med min estimerede CO2-udledning"
-            data={myDistributionComparison ?? []}
-          />
-        </div>
-         <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <div className="relative">
-            <div className="absolute right-0 top-0 rounded-bl-lg rounded-tr-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
-              Testdata
-            </div>
+      {entryGroups !== undefined && entryGroups.length > 0 ? (
+        <div className="flex flex-wrap gap-4">
+          {myInsights.length > 0 && <Insights insights={myInsights} />}
+          <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
             <BarChart
-              name="emissionComparison"
-              title="Min estimerede CO2-udledning"
-              data={emissionComparison}
+              name="myDistribution"
+              title="Min fordeling af elektricitet, fjernvarme og brændsler"
+              data={myConsumptionDistribution ?? []}
               control={control}
-              dataOptions={emissionComparisonDataOptions}
+              dataOptions={myDistributionDataOptions}
             />
           </div>
-        </div>
-        <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <div className="relative">
-            <div className="absolute right-0 top-0 rounded-bl-lg rounded-tr-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
-              Testdata
+          <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
+            <BarChart
+              name="distributionComparison"
+              title="Fordeling af elektricitet, fjernvarme og brændsler"
+              data={distributionComparison}
+              control={control}
+              dataOptions={distributionComparisonDataOptions}
+              comparisonOptions={distributionComparisonOptions}
+            />
+          </div>
+          <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
+            <BarChart
+              name="myDistributionComparison"
+              title="Mit forbrug sammenlignet med min estimerede CO2-udledning"
+              data={myDistributionComparison ?? []}
+            />
+          </div>
+          <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
+            <div className="relative">
+              <div className="absolute top-0 right-0 rounded-tr-lg rounded-bl-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
+                Testdata
+              </div>
+              <BarChart
+                name="emissionComparison"
+                title="Min estimerede CO2-udledning"
+                data={emissionComparison}
+                control={control}
+                dataOptions={emissionComparisonDataOptions}
+              />
             </div>
-            <MaskChart
-              title="Vedvarende energi"
-              data={[
-                {
-                  year: '2020',
-                  percentage: 45,
-                },
-                {
-                  year: '2021',
-                  percentage: 45,
-                },
-                {
-                  year: '2022',
-                  percentage: 65,
-                },
-                {
-                  year: '2023',
-                  percentage: 32,
-                },
-              ]}
-            />
+          </div>
+          <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
+            <div className="relative">
+              <div className="absolute top-0 right-0 rounded-tr-lg rounded-bl-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
+                Testdata
+              </div>
+              <MaskChart
+                title="Vedvarende energi"
+                data={[
+                  {
+                    year: '2020',
+                    percentage: 45,
+                  },
+                  {
+                    year: '2021',
+                    percentage: 45,
+                  },
+                  {
+                    year: '2022',
+                    percentage: 65,
+                  },
+                  {
+                    year: '2023',
+                    percentage: 32,
+                  },
+                ]}
+              />
+            </div>
           </div>
         </div>
-      </div> : <div className=''>Ingen data tilgængelig</div>}
+      ) : (
+        <div className="">Ingen data tilgængelig</div>
+      )}
     </PageTemplate>
   )
 }
