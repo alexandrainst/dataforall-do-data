@@ -87,11 +87,14 @@ export const Profile = () => {
       })
       return response
     },
-    onSuccess: () => {
+    onSuccess: async () => {
       if (userRecord?.id !== undefined) {
-        pb.collection('users').delete(userRecord.id).catch(error => {
+        try {
+          await pb.collection('users').delete(userRecord.id)
+        } catch (error) {
           console.error('Failed to delete user:', error)
-        })
+          return
+        }
       }
       pb.authStore.clear()
       navigate({ to: '/' })
