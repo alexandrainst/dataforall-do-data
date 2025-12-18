@@ -380,37 +380,47 @@ export const Dashboard = () => {
             data={myDistributionComparison ?? []}
           />
         </div>
-        <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <BarChart
-            name="emissionComparison"
-            title="Min estimerede CO2-udledning"
-            data={emissionComparison}
-            control={control}
-            dataOptions={emissionComparisonDataOptions}
-          />
+         <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
+          <div className="relative">
+            <div className="absolute right-0 top-0 rounded-bl-lg rounded-tr-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
+              Testdata
+            </div>
+            <BarChart
+              name="emissionComparison"
+              title="Min estimerede CO2-udledning"
+              data={emissionComparison}
+              control={control}
+              dataOptions={emissionComparisonDataOptions}
+            />
+          </div>
         </div>
         <div className="w-full rounded-lg bg-white p-6 shadow-sm lg:w-[calc(50%-.5rem)]">
-          <MaskChart
-            title="Vedvarende energi"
-            data={[
-              {
-                year: '2020',
-                percentage: 45,
-              },
-              {
-                year: '2021',
-                percentage: 45,
-              },
-              {
-                year: '2022',
-                percentage: 65,
-              },
-              {
-                year: '2023',
-                percentage: 32,
-              },
-            ]}
-          />
+          <div className="relative">
+            <div className="absolute right-0 top-0 rounded-bl-lg rounded-tr-lg bg-orange-400 px-3 py-1 text-xs font-semibold text-white">
+              Testdata
+            </div>
+            <MaskChart
+              title="Vedvarende energi"
+              data={[
+                {
+                  year: '2020',
+                  percentage: 45,
+                },
+                {
+                  year: '2021',
+                  percentage: 45,
+                },
+                {
+                  year: '2022',
+                  percentage: 65,
+                },
+                {
+                  year: '2023',
+                  percentage: 32,
+                },
+              ]}
+            />
+          </div>
         </div>
       </div> : <div className=''>Ingen data tilgængelig</div>}
     </PageTemplate>
