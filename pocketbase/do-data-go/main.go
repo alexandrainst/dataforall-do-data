@@ -284,6 +284,34 @@ func main() {
 			return e.JSON(http.StatusOK, map[string]string{"message": "Data entry deleted successfully"})
 		}).Bind(apis.RequireAuth())
 
+		se.Router.DELETE("/api/organization", func(e *core.RequestEvent) error {
+			// Get authenticated user
+			authRecord := e.Auth
+			if authRecord == nil {
+				return apis.NewUnauthorizedError("Authentication required", nil)
+			}
+
+			// Get user's organization ID
+			organizationId := authRecord.Get("organization")
+			if organizationId == nil {
+				return apis.NewBadRequestError("No organization found", nil)
+			}
+
+			orgId := organizationId.(string)
+
+			// Delete the organization (cascade delete will handle related records)
+			org, err := e.App.FindRecordById("organizations", orgId)
+			if err != nil {
+				return apis.NewNotFoundError("Organization not found", err)
+			}
+
+			if err := e.App.Delete(org); err != nil {
+				return apis.NewBadRequestError("Failed to delete organization", err)
+			}
+
+			return e.JSON(http.StatusOK, map[string]bool{"success": true})
+		}).Bind(apis.RequireAuth())
+
 		se.Router.GET("/{path...}", apis.Static(os.DirFS("./pb_public"), false))
 		return se.Next()
 	})
