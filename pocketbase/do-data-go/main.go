@@ -297,7 +297,10 @@ func main() {
 				return apis.NewBadRequestError("No organization found", nil)
 			}
 
-			orgId := organizationId.(string)
+			orgId, ok := organizationId.(string)
+			if !ok {
+				return apis.NewBadRequestError("Invalid organization identifier", nil)
+			}
 
 			// Delete the organization (cascade delete will handle related records)
 			org, err := e.App.FindRecordById("organizations", orgId)
