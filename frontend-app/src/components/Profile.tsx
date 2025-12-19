@@ -80,31 +80,29 @@ export const Profile = () => {
     },
   })
 
-  // Copilot creation, no idea if it is correct
-  // const deleteAllDataMutation = useMutation({
-  //   mutationFn: async () => {
-  //     if (user?.expand?.organization?.id === undefined) {
-  //       throw new Error('No organization ID found')
-  //     }
-  //     // Delete all data entries for this organization
-  //     const dataEntries = await pb.collection('data_entries').getFullList({
-  //       filter: `organization="${user.expand.organization.id}"`,
-  //     })
-
-  //     await Promise.all(
-  //       dataEntries.map(entry => pb.collection('data_entries').delete(entry.id))
-  //     )
-  //   },
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries()
-  //     setShowDeleteConfirm(false)
-  //     alert('Alle data er blevet slettet')
-  //   },
-  //   onError: error => {
-  //     console.error('Failed to delete data:', error)
-  //     alert('Fejl ved sletning af data')
-  //   },
-  // })
+  const deleteAllDataMutation = useMutation({
+    mutationFn: async () => {
+      const response = await pb.send('/api/organization', {
+        method: 'DELETE',
+      })
+      return response
+    },
+    onSuccess: async () => {
+      if (userRecord?.id !== undefined) {
+        try {
+          await pb.collection('users').delete(userRecord.id)
+        } catch (error) {
+          console.error('Failed to delete user:', error)
+          return
+        }
+      }
+      pb.authStore.clear()
+      navigate({ to: '/' })
+    },
+    onError: error => {
+      console.error('Failed to delete organization data:', error)
+    },
+  })
 
   return (
     <PageTemplate title={user?.expand?.organization?.name}>
@@ -167,7 +165,7 @@ export const Profile = () => {
         confirmLabel="Ja, slet alle data"
         cancelLabel="Annuller"
         onConfirm={() => {
-          // deleteAllDataMutation.mutate()
+          deleteAllDataMutation.mutate()
         }}
         onCancel={() => setShowDeleteConfirm(false)}
       />
