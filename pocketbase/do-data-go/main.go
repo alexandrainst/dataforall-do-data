@@ -23,6 +23,7 @@ import (
 
 type ExportRecord struct {
 	Value            float64
+	Unitname         string
 	Domainname       string
 	Typename         string
 	Organizationtype string
@@ -91,6 +92,7 @@ func exportEntries(app *pocketbase.PocketBase, year int) ([]ExportRecord, error)
 	err := app.DB().
 		Select(
 			"SUM(view_entries.value) as value",
+			"view_entries.unitName as unitname",
 			"view_entries.domainName as domainname",
 			"view_entries.typeName as typename",
 			"organization_categories.name as organizationtype",
@@ -100,7 +102,7 @@ func exportEntries(app *pocketbase.PocketBase, year int) ([]ExportRecord, error)
 		LeftJoin("organizations", dbx.NewExp("view_entries.organization = organizations.id")).
 		LeftJoin("organization_categories", dbx.NewExp("organizations.category = organization_categories.id")).
 		Where(dbx.HashExp{"year": fmt.Sprintf("%d", year)}).
-		GroupBy("domainname", "typename", "organizationtype", "year").
+		GroupBy("domainname", "unitname", "typename", "organizationtype", "year").
 		All(&entries)
 	if err != nil {
 		return nil, err
@@ -174,9 +176,9 @@ func main() {
 
 			printer := message.NewPrinter(language.Danish)
 			var csvBuilder bytes.Buffer
-			csvBuilder.WriteString("Value;Domain;Type;OragnizationType;Year\n")
+			csvBuilder.WriteString("Value;Unit;Domain;Type;OrganizationType;Year\n")
 			for _, entry := range entries {
-				csvString := printer.Sprintf("%.2f;%s;%s;%s;%#d\n", entry.Value, entry.Domainname, entry.Typename, entry.Organizationtype, entry.Year)
+				csvString := printer.Sprintf("%.2f;%s;%s;%s;%s;%#d\n", entry.Value, entry.Unitname, entry.Domainname, entry.Typename, entry.Organizationtype, entry.Year)
 				csvBuilder.WriteString(csvString)
 			}
 
