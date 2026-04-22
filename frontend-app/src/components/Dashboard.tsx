@@ -89,7 +89,6 @@ export const Dashboard = () => {
     myDistributionData,
     distributionComparisonData,
     distributionComparisonComparison,
-    emissionComparisonData,
   ] = watch([
     'myDistributionData',
     'distributionComparisonData',
