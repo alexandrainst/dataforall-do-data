@@ -69,7 +69,7 @@ export const Login = () => {
           <img
             src={VejleLogo}
             alt="Vejle Logo"
-            className="h-16 w-auto object-contain"
+            className="h-14 w-auto object-contain"
           />
         </div>
         <h4 className="mb-6 text-center font-semibold text-darkblue">
@@ -119,7 +119,7 @@ export const Login = () => {
       <img
         src={Logos}
         alt="Logos"
-        className="absolute top-0 right-0 mt-3 mr-3 h-[100px]"
+        className="absolute top-0 right-0 mt-3 mr-3 h-[110px]"
       />
 
       {/* Soft wave shape left - extends full width */}
